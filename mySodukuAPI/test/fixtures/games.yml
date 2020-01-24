@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  difficulty: MyString
+  game_array_start: MyText
+  game_array_end: MyText
+
+two:
+  difficulty: MyString
+  game_array_start: MyText
+  game_array_end: MyText

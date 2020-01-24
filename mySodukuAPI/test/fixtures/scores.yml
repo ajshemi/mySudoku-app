@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  gamer: one
+  game: one
+  game_score: 1
+
+two:
+  gamer: two
+  game: two
+  game_score: 1
