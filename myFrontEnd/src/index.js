@@ -225,6 +225,7 @@ let formCodeBlock=function(gamePuzzle,gridContainer){
 gridContainer.addEventListener('click',(event) => {
   // debugger
   let game_level
+  
   // console.log(event.target)
   if(event.target.tagName==="BUTTON" && event.target.innerText==="Play Game"){
 
@@ -234,17 +235,21 @@ gridContainer.addEventListener('click',(event) => {
     .then(response=>response.json())
     .then(gamePuzzle=>{
       game_level=gamePuzzle.difficulty
+      console.log(`return GET: ${gamePuzzle.difficulty}`)
       fetch('http://localhost:3000/games',{
       method: "POST",
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify({
-        difficulty: game_level,
+        difficulty: gamePuzzle.difficulty,
         game_array_start: gamePuzzle.game_array_start,
         game_array_end: gamePuzzle.game_array_end
       })
     })
     .then(response=>response.json())
-    .then(gameObject=>{formCodeBlock(gameObject,gridContainer)})//{formCodeBlock(returnedObject,gridContainer)})
+    .then(gameObject=>{
+      
+      console.log(`return POST: ${gameObject.difficulty}`)
+      formCodeBlock(gameObject,gridContainer)})//{formCodeBlock(returnedObject,gridContainer)})
     })
 
     // playGame.style.display="none"
@@ -266,7 +271,7 @@ gridContainer.addEventListener('click',(event) => {
   }
   
   if(event.target.tagName==="INPUT" && event.target.type ==='submit'){
-    // let time_elapsed
+    
     event.preventDefault()
     userNameForm.style.display="block"
     let game_number=parseInt(event.target.parentElement.querySelector("form").id.split("-")[2])
@@ -297,20 +302,23 @@ gridContainer.addEventListener('click',(event) => {
     
     // debugger
     // POST IS WORKING!
-    debugger
+
+    // debugger
     // // console.log(gamePuzzle.id)
+    let time_elapsed
     fetch(`http://localhost:3000/games/${game_number}`,{
         method: "PATCH",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({
-            difficulty: game_level,
+            // difficulty: game_level,
             game_array_start: outerArray,
             game_array_end: outerArray
         })
     })
     .then(response=>response.json())
     .then(gameObject=>{
-      // time_elapsed=gameObject.time_elapsed
+      console.log(gameObject)
+      time_elapsed=gameObject.time_elapsed
       formCodeBlock(gameObject,gridContainer)})
     // newGame.style.display='block'
     // event.target.reset()
@@ -328,21 +336,21 @@ gridContainer.addEventListener('click',(event) => {
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body: JSON.stringify({
-          gamer_name:gamer_name,
-          game_id:game_number,
-          game_pass:sudokuChecker(outerArray)
+          gamer_name: gamer_name,
+          game_score: time_elapsed,
+          game_id: game_number,
+          game_pass: sudokuChecker(outerArray)
+          // game_score: time_passed
         })
       })
       .then(response=>response.json())
       .then(scoreObject=>{scoreOutput(scoreObject)})//gameScore=>console.log(gameScore))
-
     })
 
   }
 
   if(event.target.tagName==="BUTTON" && event.target.innerText==="Reset"){
     event.target.parentElement.querySelector("form").reset()
-    resetTime
   }
 
   // if(event.target.tagName==="INPUT" && event.target.type ==='submit'){
@@ -366,7 +374,7 @@ gridContainer.addEventListener('click',(event) => {
   // }
 })
 let asideElement=document.querySelector("aside")
-let scoreOutput=function(scoreObject,time_elapsed){
+let scoreOutput=function(scoreObject){
   let divElement=document.createElement('div')
   let pElement=document.createElement('p')
   pElement.innerText=`gamer_name: ${scoreObject.gamer_name}`
@@ -375,13 +383,10 @@ let scoreOutput=function(scoreObject,time_elapsed){
   pElement.innerText=`game_number: ${scoreObject.game_id}`
   divElement.append(pElement)
   pElement=document.createElement('p')
-  pElement.innerText=scoreObject.game_score
+  pElement.innerText=`game_score/time_elapsed: ${scoreObject.game_score}`
   divElement.append(pElement)
   pElement=document.createElement('p')
   scoreObject.game_pass ? pElement.innerText= "PASS 👍" : pElement.innerText= "FAIL 👎";
-  divElement.append(pElement)
-  pElement=document.createElement('p')
-  pElement.innerText =`time_elapsed: ${time_elapsed}`
   divElement.append(pElement)
   asideElement.append(divElement)
 }

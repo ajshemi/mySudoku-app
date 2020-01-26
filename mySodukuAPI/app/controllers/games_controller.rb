@@ -15,6 +15,7 @@ class GamesController < ApplicationController
     end
     
     def create 
+        # byebug
         game=Game.create(difficulty:params[:game]["difficulty"],game_array_start:params[:game]["game_array_start"],game_array_end:params[:game]["game_array_end"])
         if game.valid?
             render json: game
@@ -24,8 +25,9 @@ class GamesController < ApplicationController
     end
 
     def update
+        # byebug
         game = Game.find_by(id:params[:id])
-        game.update(difficulty:params[:game]["difficulty"],game_array_start:params[:game]["game_array_start"],game_array_end:params[:game]["game_array_end"])
+        game.update(game_array_start:params[:game]["game_array_start"],game_array_end:params[:game]["game_array_end"]) #perhaps no need to update difficulty:params[:game]["difficulty"]
         render json: game
     end
     
