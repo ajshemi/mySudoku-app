@@ -143,6 +143,7 @@ let formCodeBlock=function(gamePuzzle,gridContainer){
   let playGameButton=document.createElement("button")
   playGameButton.classList.add("ui","button","active")
   playGameButton.textContent="Play Game"
+  playGameButton.style='margin-bottom: 2%;'
   playGameButton.id="play-game"
 
  //game on button
@@ -168,6 +169,85 @@ let formCodeBlock=function(gamePuzzle,gridContainer){
       for(let j=0;j<arrayColumnLength;j++){
           let divElement=document.createElement('div')
           divElement.classList.add('grid-item')
+          // if(i===0 || i===3 || i===6){
+          //   divElement.style="border-top-width: thick;"
+          // }
+          // if(i===8){
+          //   divElement.style="border-bottom-width: thick;"
+          // }
+          // if(j===8 && i!==0 && i!==8){
+          //   divElement.style="border-right-width:thick;"
+          // }
+          if(i===0 && j===2 || i===0 && j===5 || i===0 && j===8){
+            divElement.style="border-top-width: thick;border-right-width: thick;"
+          }
+          if(i===3 && j===2 || i===3 && j===5 || i===3 && j===8){
+            divElement.style="border-top-width: thick;border-right-width: thick;"
+          }
+          if(i===6 && j===2 || i===6 && j===5 || i===6 && j===8){
+            divElement.style="border-top-width: thick;border-right-width: thick;"
+          }
+          if(i===0 && j===0 || i===3 && j===0 || i===6 && j===0){
+            divElement.style="border-top-width:thick;border-left-width:thick;"
+          }
+          if(i===8 && j===2 || i===8 && j===5 || i===8 && j===8){
+            divElement.style="border-bottom-width:thick;border-right-width:thick;"
+          }
+          if(i===8 && j===0){
+            divElement.style="border-bottom-width:thick;border-left-width:thick;"
+          }
+          if(i===8 && j===1){
+            divElement.style="border-bottom-width:thick"
+          }
+          if(i===8 && j===3 || i===8 && j===4 || i===8 && j===6 || i===8 && j===7 ){
+            divElement.style="border-bottom-width:thick"
+          }
+          if(i===6 && j===1 || i===6 && j===3 || i===6 && j===4 || i===6 && j===6 || i===6 && j===7 ){
+            divElement.style="border-top-width:thick"
+          }
+          if(i===3 && j===1 || i===3 && j===3 || i===3 && j===4 || i===3 && j===6 || i===3 && j===7 ){
+            divElement.style="border-top-width:thick"
+          }
+          if(i===0 && j===1 || i===0 && j===3 || i===0 && j===4 || i===0 && j===6 || i===0 && j===7 ){
+            divElement.style="border-top-width:thick"
+          }
+
+          if(i===1 && j===0 ||i===2 && j===0  ||i===4 && j===0 ||i===5 && j===0 ||i===7 && j===0  ){
+            divElement.style="border-left-width:thick"
+          }
+
+          if(i===4 && j===2 || i===4 && j===5 || i===4 && j===8){
+            divElement.style="border-right-width:thick"
+          }
+
+          if(i===5 && j===2 || i===5 && j===5 || i===5 && j===8){
+            divElement.style="border-right-width:thick"
+          }
+          if(i===7 && j===2 || i===7 && j===5 || i===7 && j===8){
+            divElement.style="border-right-width:thick"
+          }
+          if(i===2 && j===2 || i===2 && j===5 || i===2 && j===8){
+            divElement.style="border-right-width:thick"
+          }
+          if(i===1 && j===2 || i===1 && j===5 || i===1 && j===8){
+            divElement.style="border-right-width:thick"
+          }
+          // if(i===0 && (j!==2 || j!==5 || j!==8)){
+          //   divElement.style="border-top-width:thick"
+          // }
+          // if(i===3 && (j!==2 || j!==5 || j!==8)){
+          //   divElement.style="border-top-width:thick"
+          // }
+          // if(i===6 && (j!==2 || j!==5 || j!==8)){
+          //   divElement.style="border-top-width:thick"
+          // }
+          // if(i===8 && j===2 || i===8 && j===5 || i===8 && j===8){
+          //   divElement.style="border-bottom-width: thick;border-right-width: thick;"
+          // }
+          // if(i===8 && (j!==2 || j!==5 || j!==8)){
+          //   divElement.style="border-bottom-width:thick"
+          // }
+       
 
           if(gamePuzzle.game_array_start[i][j]){
               divElement.textContent=gamePuzzle.game_array_start[i][j]
@@ -186,6 +266,7 @@ let formCodeBlock=function(gamePuzzle,gridContainer){
               inputElement.min="1"
               inputElement.classList.add('grid-item')
               inputElement.value=""
+             
               divElement.append(inputElement)
               newFormElement.append(divElement)  
           }
