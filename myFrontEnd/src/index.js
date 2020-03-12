@@ -143,7 +143,7 @@ let formCodeBlock=function(gamePuzzle,gridContainer){
   let playGameButton=document.createElement("button")
   playGameButton.classList.add("ui","button","active")
   playGameButton.textContent="Play Game"
-  playGameButton.style='margin-bottom: 2%;'
+  playGameButton.style='margin-bottom: 2%; margin-left: 10%;'
   playGameButton.id="play-game"
 
  //game on button
@@ -159,6 +159,7 @@ let formCodeBlock=function(gamePuzzle,gridContainer){
   let newFormElement = document.createElement("form") //create form
   newFormElement.id = `game-form-${gamePuzzle.id}`
   newFormElement.classList.add("grid-container")
+  newFormElement.style='margin-left:10%;'
 
   let arrayRowLength=gamePuzzle.game_array_start.length //row length
   let arrayColumnLength=gamePuzzle.game_array_start.length //column length
@@ -169,15 +170,7 @@ let formCodeBlock=function(gamePuzzle,gridContainer){
       for(let j=0;j<arrayColumnLength;j++){
           let divElement=document.createElement('div')
           divElement.classList.add('grid-item')
-          // if(i===0 || i===3 || i===6){
-          //   divElement.style="border-top-width: thick;"
-          // }
-          // if(i===8){
-          //   divElement.style="border-bottom-width: thick;"
-          // }
-          // if(j===8 && i!==0 && i!==8){
-          //   divElement.style="border-right-width:thick;"
-          // }
+      
           if(i===0 && j===2 || i===0 && j===5 || i===0 && j===8){
             divElement.style="border-top-width: thick;border-right-width: thick;"
           }
@@ -232,21 +225,6 @@ let formCodeBlock=function(gamePuzzle,gridContainer){
           if(i===1 && j===2 || i===1 && j===5 || i===1 && j===8){
             divElement.style="border-right-width:thick"
           }
-          // if(i===0 && (j!==2 || j!==5 || j!==8)){
-          //   divElement.style="border-top-width:thick"
-          // }
-          // if(i===3 && (j!==2 || j!==5 || j!==8)){
-          //   divElement.style="border-top-width:thick"
-          // }
-          // if(i===6 && (j!==2 || j!==5 || j!==8)){
-          //   divElement.style="border-top-width:thick"
-          // }
-          // if(i===8 && j===2 || i===8 && j===5 || i===8 && j===8){
-          //   divElement.style="border-bottom-width: thick;border-right-width: thick;"
-          // }
-          // if(i===8 && (j!==2 || j!==5 || j!==8)){
-          //   divElement.style="border-bottom-width:thick"
-          // }
        
 
           if(gamePuzzle.game_array_start[i][j]){
@@ -277,6 +255,7 @@ let formCodeBlock=function(gamePuzzle,gridContainer){
   let submitInputElement=document.createElement('input')
   submitInputElement.type='submit'
   submitInputElement.value='Submit'
+  submitInputElement.style='margin-left:10%;margin-bottom:2%;'
   submitInputElement.classList="ui button active"
   // submitInputElement.style.display="none"
   // let newFormElement=document.querySelector("form")
@@ -286,6 +265,7 @@ let formCodeBlock=function(gamePuzzle,gridContainer){
   let resetButton=document.createElement('button')
   resetButton.classList="ui button active"
   resetButton.innerText='Reset'
+  resetButton.style='margin-bottom:2%'
   // resetButton.style.display="none"
   
   //SOME BUTTON
@@ -302,14 +282,74 @@ let formCodeBlock=function(gamePuzzle,gridContainer){
   
 }
 
-  
+
+
+
+//TIMER CODE BLOCK
+let theTimer = document.querySelector(".timer"); //also reset button
+console.log(theTimer.innerHTML)
+// timer=0
+let timer = [0,0,0,0];
+let interval;
+// let timerRunning = false; // not running on load
+let timerStart=document.querySelector("#timerStart")
+// console.log(timerStart.innerHTML)
+
+let timerReset=document.querySelector('#timerReset')
+// console.log(timerReset.innerHTML)
+
+// start=(event) => {
+//   console.log(event.target.innerHTML)
+//   console.log(event.target.tagName)
+//   if(event.target.tagName==="BUTTON" && event.target.innerHTML==="Start"){
+//     interval=setInterval(runTimer,10)
+//   }
+//   // if (event.target.value===)
+// }
+
+// timerStart.addEventListener('click',start)
+
+
+reset=()=>{
+  console.log("reset button was clicked")
+  clearInterval(interval)
+  // interval=null;
+  // timer=[0,0,0,0];
+  // theTimer.innerHTML='00:00:00'
+}
+
+// timerReset.addEventListener('click',reset)
+
+
+
+// // Leading zero
+function leadingZero(time) {
+  if (time <= 9) {
+      time = "0" + time
+  }
+  return time
+}
+// // Run a standard minute/second/hundredths timer:
+function runTimer() {
+  theTimer.innerHTML=timer
+  // timer++
+
+  let currentTime = leadingZero(timer[0]) + ":" + leadingZero(timer[1]) + ":" + leadingZero(timer[2])
+  theTimer.innerHTML = currentTime
+  timer[3]++
+
+  timer[0] = Math.floor((timer[3]/100)/60)  //minute
+  timer[1] = Math.floor((timer[3]/100) - (timer[0] * 60))  // seconds
+  timer[2] = Math.floor(timer[3] - (timer[1] * 100) - (timer[0] * 6000)) //hundredths
+}
 gridContainer.addEventListener('click',(event) => {
   // debugger
   let game_level
   
   // console.log(event.target)
   if(event.target.tagName==="BUTTON" && event.target.innerText==="Play Game"){
-
+    
+    interval=setInterval(runTimer,10) 
     let game_number=parseInt(event.target.parentElement.querySelector("form").id.split("-")[2])
     // console.dir(event.target.innerText)}
     fetch(`http://localhost:3000/games/${game_number}`)
@@ -318,23 +358,24 @@ gridContainer.addEventListener('click',(event) => {
       game_level=gamePuzzle.difficulty
       console.log(`return GET: ${gamePuzzle.difficulty}`)
       fetch('http://localhost:3000/games',{
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({
-        difficulty: gamePuzzle.difficulty,
-        game_array_start: gamePuzzle.game_array_start,
-        game_array_end: gamePuzzle.game_array_end
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({
+          difficulty: gamePuzzle.difficulty,
+          game_array_start: gamePuzzle.game_array_start,
+          game_array_end: gamePuzzle.game_array_end
+        })
       })
-    })
-    .then(response=>response.json())
-    .then(gameObject=>{
+      .then(response=>response.json())
+      .then(gameObject=>{
+        
+        console.log(`return POST: ${gameObject.difficulty}`)
+        formCodeBlock(gameObject,gridContainer)})//{formCodeBlock(returnedObject,gridContainer)})
+      })
       
-      console.log(`return POST: ${gameObject.difficulty}`)
-      formCodeBlock(gameObject,gridContainer)})//{formCodeBlock(returnedObject,gridContainer)})
-    })
-
-    // playGame.style.display="none"
-    // newGame.style.display="none"
+      // playGameButton.classList.add("ui","button","disabled")
+      // playGameButton.style.display="none"
+      // newGame.style.display="none"
     // gameOn.style.display="block"
     // debugger
     let submitButton=document.querySelectorAll('.ui.button.active')[3] 
@@ -354,6 +395,7 @@ gridContainer.addEventListener('click',(event) => {
   if(event.target.tagName==="INPUT" && event.target.type ==='submit'){
     
     event.preventDefault()
+    clearInterval(interval)
     userNameForm.style.display="block"
     let game_number=parseInt(event.target.parentElement.querySelector("form").id.split("-")[2])
     // console.log(game_number)
@@ -502,32 +544,6 @@ let scoreOutput=function(scoreObject){
 
 
 
-
-
-//TIMER CODE BLOCK
-// let theTimer = document.querySelector(".timer"); //also reset button
-// let timer = [0,0,0,0];
-// let interval;
-// let timerRunning = false; // not running on load
-
-
-// // Leading zero
-// function leadingZero(time) {
-//   if (time <= 9) {
-//       time = "0" + time
-//   }
-//   return time
-// }
-// // Run a standard minute/second/hundredths timer:
-// function runTimer() {
-//   let currentTime = leadingZero(timer[0]) + ":" + leadingZero(timer[1]) + ":" + leadingZero(timer[2])
-//   theTimer.innerHTML = currentTime
-//   timer[3]++
-
-//   timer[0] = Math.floor((timer[3]/100)/60)  //minute
-//   timer[1] = Math.floor((timer[3]/100) - (timer[0] * 60))  // seconds
-//   timer[2] = Math.floor(timer[3] - (timer[1] * 100) - (timer[0] * 6000)) //hundredths
-// }
 
 // function start() {
 //   //triggers when playGame button is clicked(the eventListener on playGame)

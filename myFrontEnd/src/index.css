@@ -12,6 +12,15 @@
     font-size: 30px;
     text-align: center;
   }
+  .timer{
+    text-align: center;
+    font-size: 25px;
+  }
+  .timerlabel{
+    text-align: center;
+    padding:10px;
+    font-size:25px;
+  }
 
   input[type=number] {
     font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
